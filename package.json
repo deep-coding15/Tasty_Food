@@ -1,0 +1,28 @@
+{
+  "name": "tastyfood",
+  "version": "1.0.0",
+  "description": "Pour les sessions, j'ai utilisé le design pattern \"Singleton\". \r Le design pattern \"Singleton\" est utile dans les cas suivants :\r - une connexion à une base de données\r - un gestionnaire de configuration\r - une session utilisateur\r - un logger",
+  "main": "index.js",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview",
+    "postinstall": "npx tailwindcss -i ./public/assets/css/style.css -o ./public/assets/css/style.css --minify",
+    "start": "php -S localhost:8000 -t public",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.11",
+    "@tailwindcss/vite": "^4.1.11"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11",
+    "vite": "^7.0.6"
+  }
+}
