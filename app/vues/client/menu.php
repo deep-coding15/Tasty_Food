@@ -1,6 +1,7 @@
 <?php
 namespace App\Vues\Client;
 use App\Modeles\PlatRepository;
+use App\Config\ConstanteServer;
 
 $title = 'Tasty Food - Accueil'; ?>
 <?php
@@ -175,5 +176,7 @@ $page = $_GET['page'] ?? 'default'; // valeur par défaut
 
 
 <?php $content = ob_get_clean(); ?>
-
-<?php require 'layout.php'; ?>
+<?php  
+$layout_path = ConstanteServer::base_public() . '/layout.php';
+require_once $layout_path;
+?>

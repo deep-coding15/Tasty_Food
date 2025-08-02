@@ -4,6 +4,8 @@ require_once dirname(__DIR__, 3) . '/Core/Autoloader.php';
 use App\Core\Autoloader;
 use App\Modeles\Utilisateurs\UtilisateurRepository;
 use App\Config\Constante;
+use App\Config\ConstanteServer;
+
 Autoloader::register();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -50,7 +52,8 @@ ob_start();
 </section>
 
 <?php $content = ob_get_clean(); ?>
+
 <?php  
-$layout_path = Constante::base_path_public() . '/layout.php';
+$layout_path = ConstanteServer::base_public() . '/layout.php';
 require_once $layout_path;
 ?>

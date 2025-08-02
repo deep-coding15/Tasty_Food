@@ -1,33 +1,27 @@
 <?php
 namespace App\Config;
-class Constante{
-    private static string $BASE_URL = '/php/tastyfood';
-    private static ?string $BASE_PATH = null;
-    private static string $VUES_ADMIN = "/app/vues/admin";
-    private static string $VUES_CLIENT = "/app/vues/client";
-    private static string $BASE_IMG_PROFIL = '/app/data/Profile/Images';
-    private static string $BASE_PUBLIC = '/public';
+class Constante extends SuperConstante{
+    
+    //private static string $WEB_PAGE_URL = '/localhost';
     
     /**
-     * '/php/tastyfood'
-     * @return string '/php/tastyfood'
+     * Summary of get_web_page_url
+     * @return string /localhost
      */
+    /* public static function get_web_page_url(){
+        return self::$WEB_PAGE_URL;
+    } */
     public static function base_url(): string{
-        return self::$BASE_URL;
+        
+        return  SuperConstante::getBaseApp();
     }
 
     /**
-     * Summary of base_path
-     * @return string __DIR__ . '/..'
+     * Summary of base_public
+     * @return string /public
      */
-    public static function base_path(): string{
-        if(self::$BASE_PATH === null)
-            self::set_base_path();
-        return self::$BASE_PATH;
-    }
-
-    public static function set_base_path(){
-        self::$BASE_PATH = dirname(__DIR__, 2);
+    public static function base_public(): string{
+        return  SuperConstante::getBasePublic();
     }
 
     /**
@@ -35,15 +29,24 @@ class Constante{
      * @return string /php/tastyfood/app/vues/admin
      */
     public static function base_url_vues_admin(): string{
-        return self::$BASE_URL . self::$VUES_ADMIN;
+        return  SuperConstante::getBaseApp() . SuperConstante::getVuesAdmin();
     }
 
     /**
-     * Summary of base_url_vues_client
+     * Summary of 
      * @return string /php/tastyfood/app/vues/client
      */
     public static function base_url_vues_client(): string{
-        return self::$BASE_URL . self::$VUES_CLIENT;
+        return SuperConstante::getBaseApp() . 
+            SuperConstante::getBaseVues() . SuperConstante::getVuesClient();
+    }
+
+    /**
+     * Summary of base_url_vues
+     * @return string '/php/tastyfood/app/vues'
+     */
+    public static function base_url_vues(): string{
+        return  SuperConstante::getBaseApp();
     }
 
     /**
@@ -51,7 +54,7 @@ class Constante{
      * @return string /php/tastyfood/app/data/Profile/Images
      */
     public static function base_url_img_profil(): string{
-        return self::base_url() . self::$BASE_IMG_PROFIL;
+        return  SuperConstante::getBaseImgProfil();
     }
 
     /**
@@ -59,17 +62,6 @@ class Constante{
      * @return string  /php/tastyfood/public
      */
     public static function base_url_public(): string  {
-        return self::base_url() . self::$BASE_PUBLIC;
-    }
-    
-    /**
-     * Summary of base_path_public
-     * @return string c:\\xampp\\htdocs\\php\\tastyfood\\public
-     */
-    public static function base_path_public(): string  {
-        return self::base_path() . self::$BASE_PUBLIC;
-    }
+        return  SuperConstante::getBasePublic();
+    } 
 }
-    /* define('BASE_URL', '/php/tastyfood');
-    define('BASE_PATH', __DIR__ . '/..');
-     *///define('BASE_IMG_PROFIL', BASE_URL . '/data/Profile/Images/');

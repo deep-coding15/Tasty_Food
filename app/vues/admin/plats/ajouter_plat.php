@@ -7,7 +7,8 @@
 
     use App\Modeles\PlatRepository;
     use App\Config\Constante;
-    use App\Lib\Utils;
+use App\Config\ConstanteServer;
+use App\Lib\Utils;
     
 
     $title = "Ajout d'une recette !"; ?>
@@ -101,7 +102,8 @@ class="margin-2 bg-gray-100 text-black rounded block w-full px-3 py-2 focus:outl
   <?php $content = ob_get_clean(); ?>
     
 <?php /* endif; */ ?>
+
 <?php  
-$layout_path = Constante::base_path_public() . '/layout.php';
+$layout_path = ConstanteServer::base_public() . '/layout.php';
 require_once $layout_path;
-?> 
+?>

@@ -4,7 +4,7 @@ namespace App\Controleurs\Client;
 use App\Core\Controleur;
 use App\Modeles\PlatRepository;
 
-class CarteControleur extends Controleur
+class PlatControleur extends Controleur
 {
     public function afficherCarte()
     {

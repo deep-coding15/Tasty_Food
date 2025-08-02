@@ -13,7 +13,7 @@ use App\Modeles\Utilisateurs\Role;
 class SessionManager
 {
     private static ?SessionManager $instance = null;
-    private SecureSession $session;
+    private ?SecureSession $session = null;
 
     //constructeur privé
     private function __construct()
@@ -43,39 +43,89 @@ class SessionManager
     /**
      * Initialise les paramètre de session utilisateur
      */
-    private function initSessionUtilisateur(string $role = 'visiteur')
+    public function initSessionUtilisateur(string $role = 'visiteur', array  $user = [])
     {
+        $this->session ??= new SecureSession();
+        if (!Role::isValid($role)) :
+            $role = 'visiteur';
+        endif;
 
+        $this->sessionUtilisateur($role);
+
+    }
+
+    public function regeneratedSessionUtilisateur(string $role = 'visiteur')
+    {
+        if (isset($this->session)) {
+            $this->session->destroy();
+        }
+        $this->session = new SecureSession();
         if (!Role::isValid($role)) :
             $role = 'visiteur';
         endif;
         if (!$this->session->has('utilisateur')) {
-            // Si l'utilisateur n'est pas connecté, on initialise une session vide
-            $this->session->set('utilisateur', [
-                'id'         => null,
-                'nom'        => null,
-                'prenom'     => null,
-                'login'      => null,
-                'email'      => null,
-                'is_active'  => false,
-                'img_profil' => null,
-                'telephone'  => null,
-                'role'       => $role,
-            ]);
-            //echo 'session utilisateur';
-            //var_dump($_session->get('utilisateur')); // pour déboguer, à retirer en production
+            $this->sessionUtilisateur($role);
         }
+    }
 
+    /**
+     * Summary of regeneratedSessionUtilisateurByUsersArray
+     * @param array $users = [
+     *  - id
+     *  - nom
+     *  - prenom
+     *  - login
+     *  - email
+     *  - is_active
+     *  - img_profil
+     *  - telephone
+     *  - role
+     * ] in order please
+     * @param string $role
+     * @return void
+     */
+    public function regeneratedSessionUtilisateurByUsersArray(array $users, string $role = 'visiteur'){
+        if(is_null($users))
+            $this->initSessionUtilisateur($role);
+        $this->getSession()->set('utilisateur', $users);
+        
+        if(!is_null($this->getSession()->get('password')))
+            $this->getSession()->remove('password');
+        
+        // Si le rôle a changé, on le met à jour explicitement
         if ($this->session->get('utilisateur')['role'] !== $role) {
             $this->session->role($role);
         }
-        /* $this->session->set('utilisateur', [
-                'role' => $role,
-            ]); */
-
-        // Si l'utilisateur est connecté, on peut récupérer ses informations
-        //return $this->session->get('utilisateur');
     }
+
+    private function sessionUtilisateur(string $role = 'visiteur', ?SecureSession $session = null): void
+    {
+        //Si $session est null, alors assigne $this->session à $session.
+        $session ??= $this->session;
+
+        if (!$session && !$this->session) {
+            throw new \RuntimeException("Session manquante.");
+        }
+        $utilisateur = [
+            'id'         => $session->get('id'),
+            'nom'        => $session->get('nom'),
+            'prenom'     => $session->get('prenom'),
+            'login'      => $session->get('login'),
+            'email'      => $session->get('email'),
+            'is_active'  => false,
+            'img_profil' => $session->get('img_profil'),
+            'telephone'  => $session->get('telephone'), // corrigé ici
+            'role'       => $role,
+        ];
+
+        $this->session->set('utilisateur', $utilisateur);
+
+        // Si le rôle a changé, on le met à jour explicitement
+        if ($this->session->get('utilisateur')['role'] !== $role) {
+            $this->session->role($role);
+        }
+    }
+
 
     /**
      * Initialisation d'un message de confirmation ou d'echec de session vide
@@ -85,29 +135,23 @@ class SessionManager
         $this->session->set('MESSAGE', $message);
     }
 
-    public function initSession(){
+    public function initSession()
+    {
         self::initSessionUtilisateur();
         self::initSessionMessage();
     }
 
-    public function regeneratedSessionUtilisateur(SecureSession $sessionUtilisateur)
-    {
-        if (isset($this->session)){
-            $this->session->destroy();
-        }
-        return $this->session = new SecureSession();
-    }
     
-    public function getSession(): SecureSession{
-        if($this->session === null)
+
+    public function getSession(): SecureSession
+    {
+        if ($this->session === null)
             self::initSession();
         return $this->session;
     }
 
-    public function setSession(SecureSession $secureSession) {
+    public function setSession(SecureSession $secureSession)
+    {
         $this->session = $secureSession;
     }
 }
-//var_dump($_utilisateur); // pour déboguer, à retirer en production
-
-//Implicitly nullable parameters are deprecated.intelephense(P1078)

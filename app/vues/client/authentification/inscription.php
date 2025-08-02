@@ -6,6 +6,7 @@ echo dirname(__DIR__, 4) . '/vendor/autoload.php';
 //echo dirname(__DIR__, 3) . '/core/Autoloader.php';
 require_once dirname(__DIR__, 3) . '/Core/Autoloader.php';
 
+use App\Config\ConstanteServer;
 use App\Core\Autoloader;
 
 Autoloader::register();
@@ -126,3 +127,7 @@ ob_start();
 <?php ?>
 <?php $content = ob_get_clean(); ?>
 <?php require_once dirname(__FILE__, 5) . '/public/layout.php'; ?>
+<?php  
+$layout_path = ConstanteServer::base_public() . '/layout.php';
+require_once $layout_path;
+?>

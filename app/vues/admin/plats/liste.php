@@ -2,7 +2,7 @@
 namespace App\Vues\Admin\Plats;
 use App\Modeles\PlatRepository;
 use App\Config\Constante;
-
+use App\Config\ConstanteServer;
 use App\Core\Autoloader;
 require_once dirname(__DIR__, 3) . '/Core/Autoloader.php';
 Autoloader::register();
@@ -297,12 +297,7 @@ $_session->remove('MESSAGE'); //on l'affiche une seule fois
     <?php endif; ?>
     <?php $content = ob_get_clean(); ?>
 
-    <?php  
-$layout_path = Constante::base_path_public() . '/layout.php';
-require_once $layout_path;
+<?php  
+    $layout_path = ConstanteServer::base_public() . '/layout.php';
+    require_once $layout_path;
 ?>
-    <?php /* require 'layout.php'; */ ?>
-<?php /* else : */ ?>
-    <?php /* require_once __DIR__ . '/../../erreur403.php'; */ ?>
-    
-<?php /* endif; */ ?>

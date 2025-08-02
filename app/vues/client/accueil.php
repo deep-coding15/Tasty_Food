@@ -3,6 +3,7 @@
 namespace App\Vues\Client;
 
 use App\Config\Constante;
+use App\Config\ConstanteServer;
 
 require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
@@ -202,4 +203,7 @@ $page = $_GET['page'] ?? 'default'; // valeur par défaut
 
 <?php $content = ob_get_clean(); ?>
 
-<?php require_once dirname(__FILE__, 4) . '/public/layout.php'; ?>
+<?php  
+$layout_path = ConstanteServer::base_public() . '/layout.php';
+require_once $layout_path;
+?>

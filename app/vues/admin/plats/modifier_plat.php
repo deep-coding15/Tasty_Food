@@ -7,6 +7,7 @@ Autoloader::register();
 
 use App\Modeles\PlatRepository;
 use App\Config\Constante;
+use App\Config\ConstanteServer;
 use App\Lib\Utils;
 
 $title = "Modifiez une recette !"; ?>
@@ -106,6 +107,6 @@ $title = "Modifiez une recette !"; ?>
     <?php $content = ob_get_clean(); ?>
 
 <?php  
-$layout_path = Constante::base_path_public() . '/layout.php';
+$layout_path = ConstanteServer::base_public() . '/layout.php';
 require_once $layout_path;
-?>    <?php /* endif; */ ?>
+?>

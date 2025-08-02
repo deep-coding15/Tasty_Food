@@ -1,11 +1,14 @@
 <?php
 //les namespaces n'ont pas leurs places dans les fichiers frontaux
-session_start();
-require_once __DIR__ . '../vendor/autoload.php';
+use App\Config\SessionManager;
+$_sessionManager = SessionManager::getInstance();
+
+use App\Core\Autoloader;
 
 use App\Config;
 use App\Controleurs\Client\CarteControleur;
 use App\Controleurs\Client\PanierControleur;
+
 $page = $_GET['page'] ?? 'carte';
 $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING) ?? 'carte';
 //CarteControleur

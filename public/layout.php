@@ -2,8 +2,9 @@
 
 use App\Config\SessionManager;
 use App\Config\Constante;
+use App\Config\ConstanteServer;
 
-require_once dirname(__DIR__) . '/app/Core/Autoloader.php';
+require_once ConstanteServer::base_path_app_core() . '/Autoloader.php';
 
 use App\Core\Autoloader;
 
@@ -25,12 +26,12 @@ $_sessionManager = $_instance->getSession();
   ?>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="<?= Constante::base_url() . '/public/assets/css/output.css' ?>">
+  <link rel="stylesheet" href="<?= Constante::base_public() . '/assets/css/output.css' ?>">
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 
   <title>
     <?= $title ?>
-    <?= $baseUrl = Constante::base_url() . '/app/vues'; ?>
+    <?= $baseUrl = Constante::base_url_vues_client() . '/app/vues'; ?>
   </title>
 </head>
 
@@ -42,14 +43,14 @@ $_sessionManager = $_instance->getSession();
     <!-- max-w-7xl -->
     <div class="mx-auto px-4 py-4 flex items-center justify-between">
       <nav class="space-x-6 hidden md:flex">
-        <a href="<?= Constante::base_url() ?>/app/vues/client/accueil.php" class="text-gray-600 hover:text-blue-600 flex-1">Accueil</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/client/menu.php" class="text-gray-600 hover:text-blue-600 flex-1">Menu</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/client/reservation.php" class="text-gray-600 hover:text-blue-600 flex-1">Reservation</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/client/livraison.php" class="text-gray-600 hover:text-blue-600 flex-1">Livraison</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/client/a_propos.php" class="text-gray-600 hover:text-blue-600 flex-1">A propos</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/client/contact.php" class="text-gray-600 hover:text-blue-600 flex-1">Contact</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/client/authentification/connexion.php" class="text-gray-600 hover:text-blue-600 flex-1 border border-black rounded text-green-500" id="connexion">Connexion</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/profil.php" class="text-gray-600 hover:text-blue-600 flex-1">Profil</a>
+        <a href="<?= Constante::base_url_vues_client() ?>/accueil.php" class="text-gray-600 hover:text-blue-600 flex-1">Accueil</a>
+        <a href="<?= Constante::base_url_vues_client() ?>/menu.php" class="text-gray-600 hover:text-blue-600 flex-1">Menu</a>
+        <a href="<?= Constante::base_url_vues_client() ?>/reservation.php" class="text-gray-600 hover:text-blue-600 flex-1">Reservation</a>
+        <a href="<?= Constante::base_url_vues_client() ?>/livraison.php" class="text-gray-600 hover:text-blue-600 flex-1">Livraison</a>
+        <a href="<?= Constante::base_url_vues_client() ?>/a_propos.php" class="text-gray-600 hover:text-blue-600 flex-1">A propos</a>
+        <a href="<?= Constante::base_url_vues_client() ?>/contact.php" class="text-gray-600 hover:text-blue-600 flex-1">Contact</a>
+        <a href="<?= Constante::base_url_vues_client() ?>/authentification/connexion.php" class="text-gray-600 hover:text-blue-600 flex-1 border border-black rounded text-green-500" id="connexion">Connexion</a>
+        <a href="<?= Constante::base_url_vues() ?>/app/vues/profil.php" class="text-gray-600 hover:text-blue-600 flex-1">Profil</a>
       </nav>
       <!-- bouton hamburger visible sur mobile (petits écrans)-->
       <button id="menu-toggle" class="md:hidden text-gray-600 focus:outline-none">
@@ -61,18 +62,15 @@ $_sessionManager = $_instance->getSession();
 
     <!-- uniquement visible sur mobile -->
     <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2">
-      
-         <a href="<?= Constante::base_url() ?>/app/vues/client/accueil.php" class="text-gray-600 hover:text-blue-600 flex-1">Accueil</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/client/menu.php" class="text-gray-600 hover:text-blue-600 flex-1">Menu</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/client/reservation.php" class="text-gray-600 hover:text-blue-600 flex-1">Reservation</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/client/livraison.php" class="text-gray-600 hover:text-blue-600 flex-1">Livraison</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/client/a_propos.php" class="text-gray-600 hover:text-blue-600 flex-1">A propos</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/client/contact.php" class="text-gray-600 hover:text-blue-600 flex-1">Contact</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/client/authentification/connexion.php" class="text-gray-600 hover:text-blue-600 flex-1 border border-black rounded text-green-500" id="connexion">Connexion</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/profil.php" class="text-gray-600 hover:text-blue-600 flex-1">Profil</a>
-      
-      
-      </div>
+      <a href="<?= Constante::base_url_vues_client() ?>/accueil.php" class="text-gray-600 hover:text-blue-600 flex-1">Accueil</a>
+      <a href="<?= Constante::base_url_vues_client() ?>/menu.php" class="text-gray-600 hover:text-blue-600 flex-1">Menu</a>
+      <a href="<?= Constante::base_url_vues_client() ?>/reservation.php" class="text-gray-600 hover:text-blue-600 flex-1">Reservation</a>
+      <a href="<?= Constante::base_url_vues_client() ?>/livraison.php" class="text-gray-600 hover:text-blue-600 flex-1">Livraison</a>
+      <a href="<?= Constante::base_url_vues_client() ?>/a_propos.php" class="text-gray-600 hover:text-blue-600 flex-1">A propos</a>
+      <a href="<?= Constante::base_url_vues_client() ?>/contact.php" class="text-gray-600 hover:text-blue-600 flex-1">Contact</a>
+      <a href="<?= Constante::base_url_vues_client() ?>/authentification/connexion.php" class="text-gray-600 hover:text-blue-600 flex-1 border border-black rounded text-green-500" id="connexion">Connexion</a>
+      <a href="<?= Constante::base_url_vues() ?>/app/vues/profil.php" class="text-gray-600 hover:text-blue-600 flex-1">Profil</a>
+    </div>
 
   </header>
 
@@ -103,10 +101,10 @@ $_sessionManager = $_instance->getSession();
 
       <!-- Bloc 3 : Liens -->
       <div class="w-full md:w-1/3 text-center md:text-right space-x-6">
-        <a href="<?= Constante::base_url() ?>/app/vues/client/accueil.php" class="hover:text-gray-300 transition">Accueil</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/client/a_propos.php" class="hover:text-gray-300 transition">À propos</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/client/contact.php" class="hover:text-gray-300 transition">Contact</a>
-        <a href="<?= Constante::base_url() ?>/app/vues/client/faq.php" class="hover:text-gray-300 transition">FAQ</a>
+        <a href="<?= Constante::base_url_vues_client() ?>/accueil.php" class="hover:text-gray-300 transition">Accueil</a>
+        <a href="<?= Constante::base_url_vues_client() ?>/a_propos.php" class="hover:text-gray-300 transition">À propos</a>
+        <a href="<?= Constante::base_url_vues_client() ?>/contact.php" class="hover:text-gray-300 transition">Contact</a>
+        <a href="<?= Constante::base_url_vues_client() ?>/faq.php" class="hover:text-gray-300 transition">FAQ</a>
       </div>
 
     </div>

@@ -3,7 +3,7 @@
 namespace App\Lib;
 
 use App\Config\Constante;
-
+use App\Config\ConstanteServer;
 use App\Core\Autoloader;
 require_once dirname(__DIR__, 1) . '/Core/Autoloader.php';
 Autoloader::register();
@@ -18,13 +18,16 @@ class Utils
 
     /**
      * Summary of redirect
-     * @param string $path chemin de l'adresse a specifiée a partir du projet /tastyfood
+     * @param string $path chemin de l'adresse a specifiée a partir du projet /tastyfood : /public => /tastyfood/public
      * @param int $status
      * @return never
      */
     public static function redirect(string $path =  '/index.php', int $status = 302): void
     {
-        $pathUrl = $path;
+        $baseUrl = 'http://localhost/php/tastyfood';
+        $baseUrl = ConstanteServer::base_path();
+        $pathUrl = rtrim($baseUrl, '/') . $path;
+
         if (!headers_sent()) {
             header("Location: " . $pathUrl, true, $status);
             exit;

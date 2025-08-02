@@ -7,10 +7,18 @@ Autoloader::register();
 
 use App\Modeles\Utilisateurs\UtilisateurRepository;
 use App\Config\Constante;
+use App\Config\ConstanteServer;
+use App\Config\SessionManager;
 use App\Lib\Utils;
 
     $title = "Tasty Food - PROFIL UTILISATEUR";
     $utilisateurRepository = new UtilisateurRepository();
+
+    $_sessionManager = SessionManager::getInstance();
+    $_utilisateur = $_sessionManager->getSession()->get('utilisateur');
+    //var_dump($_sessionManager);
+    //var_dump($_utilisateur);
+
     //$utilisateur = $utilisateurRepository->
     global $_session;
     /* if(!$_session->has('utilisateur')) :
@@ -32,14 +40,14 @@ use App\Lib\Utils;
         </div>
 
         <!-- Nom -->
-        <h2 class="text-2xl font-bold text-gray-800 mb-1"><?= /* $_session->get('utilisateur')['prenom'], $_session->get('utilisateur')['nom']  */ $i = 0;?></h2>
+        <h2 class="text-2xl font-bold text-gray-800 mb-1"><?= $_utilisateur['nom'] ?></h2>
 
         <!-- Email -->
-        <p class="text-gray-500 mb-4"><?= /* $_session->get('utilisateur')['email'] */ $i = 0;?></p>
+        <p class="text-gray-500 mb-4"><?= $_utilisateur['email'];?></p>
 
         <!-- Rôle -->
         <span class="inline-block px-3 py-1 text-sm bg-indigo-100 text-indigo-700 rounded-full mb-6">
-            <?= /* $_session->get('utilisateur')['role'] */ $i = 0;?>
+            <?= $_utilisateur['role'];?>
         </span>
 
         <!-- Bouton modifier -->
@@ -53,7 +61,7 @@ use App\Lib\Utils;
 <?php $content = ob_get_clean() ?>
 
 <?php  
-$layout_path = Constante::base_path_public() . '/layout.php';
+$layout_path = ConstanteServer::base_public() . '/layout.php';
 require_once $layout_path;
 ?>
 <?php /* endif; */ ?>
