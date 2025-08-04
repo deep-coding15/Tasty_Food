@@ -4,14 +4,16 @@ use App\Modeles\PlatRepository;
 use App\Config\ConstanteServer;
 use App\Config\SessionManager;
 use App\Core\Autoloader;
-
+session_start();
 require_once dirname(__DIR__, 2) . '/Core/Autoloader.php';
 Autoloader::register();
 $title = 'Tasty Food - Accueil'; ?>
 <?php
-$SessionManager = SessionManager::getInstance();
+//var_dump($_SESSION);
+/* $SessionManager = SessionManager::getInstance();
 $_utilisateur = $SessionManager->getSession()->get('utilisateur');
 var_dump($_utilisateur);
+ */
 $platRepository = new PlatRepository();
 ?>
 

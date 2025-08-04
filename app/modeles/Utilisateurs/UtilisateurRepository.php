@@ -143,7 +143,7 @@ class Utilisateur
 use App\Config\SessionManager;
 use App\Core\Exceptions\TypeUserException;
 use App\Lib\Utils;
-        
+
 class UtilisateurRepository
 {
     /**
@@ -152,7 +152,7 @@ class UtilisateurRepository
      */
     private ?Database $database = null;
     private ?SessionManager $sessionManager = null;
-    
+
     public function getDatabase(): Database|null
     {
         return $this->database;
@@ -261,7 +261,7 @@ class UtilisateurRepository
 
         if ($resultStatus  && $resultStatus->rowCount() > 0) {
             echo 'ID insere : ' . $lastid;
-            $this->sessionManager->regeneratedSessionUtilisateurByUsersArray($user, $role);
+            $this->sessionManager->regenerateSession($user, $role);
             echo "Vos informations de connection ont été enregistré avec succès";
             return true;
         } else {
@@ -287,18 +287,19 @@ class UtilisateurRepository
         $this->database->executeSqlPrepareStatement($sqlUpdate, [":email" => $email]);
 
         //initialisation de la session utilisateur
-        $this->sessionManager->regeneratedSessionUtilisateurByUsersArray($user, $user['role']);
-       
+        $this->sessionManager->regenerateSession($user, $user['role']);
+
         //redirection selon le role
         $this->redirectByRole($user);
         exit();
     }
 
-    private function redirectByRole(array $user){
+    private function redirectByRole(array $user)
+    {
         $basePublic = Constante::base_url_public();
         $baseClient = Constante::base_url_vues_client();
         $baseAdmin = Constante::base_url_vues_admin();
-        switch($user['role']){
+        switch ($user['role']) {
             case 'visiteur':
                 (new Utils)->redirect($baseClient . "/accueil.php");
                 break;
@@ -325,24 +326,24 @@ class UtilisateurRepository
             $email = trim($postData["email"]);
 
 
-            try{
+            try {
                 $this->validerSignup($email, $password);
-                $message = "Vos informations de connection sont corrects. Votre compte est maintenant actif";
-            }
-            catch(UtilisateurException $exception){
+                $message = "Vos informations de connection sont corrects. 
+                            Votre compte est maintenant actif";
+            } catch (UtilisateurException $exception) {
                 $message = "Erreur : " . $exception->getMessage();
             }
 
-            
+
             //init session message
-            $this->sessionManager->initSessionMessage( $message);
-            
-            SecureSession::showMessage($message); 
-            return true;           
+            $this->sessionManager->setMessage($message);
+
+            SecureSession::showMessage($message);
+            return true;
         }
         return false;
     }
-    
+
     /* public function redirectByRole(): void
     {
         global $_sessionManager;
@@ -377,9 +378,9 @@ class UtilisateurRepository
         $stmt = $this->database->executeSqlPrepareStatement($sql, [
             ":email" => $email
         ]);
-        
+
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
-        
+
         if (!$user) {
             throw new UtilisateurException("Aucun utilisateur trouvé avec cet email.");
         }
@@ -387,17 +388,21 @@ class UtilisateurRepository
         if (!password_verify($password, $user['password'])) {
             throw new UtilisateurException('le mot de passe n\'est pas valide');
         }
-        
+
         // Active le compte uniquement s’il n'est pas déjà actif
         if ((int)$user['is_active'] === 0) {
             $sqlVerify = "UPDATE utilisateur SET is_active = 1 WHERE email = :email";
             $this->database->executeSqlPrepareStatement($sqlVerify, [":email" => $email]);
         }
-        echo 'user in valider signup';
-        var_dump($user);
-        $_sessionManager->initSessionUtilisateur($user['role'], $user);
-        
-        return true;
+        //echo 'user in valider signup';
+        //var_dump($user);
+        $_SESSION['ID'] = $user['id_utilisateur'];
+        $_SESSION['UTILISATEUR'] = $user;
+        //$_sessionManager->initSession($user['role'], $user);
+        //var_dump($this->sessionManager->getSession()->get('UTILISATEUR'));
+        /* echo 'user in session valider signup';
+        var_dump($_SESSION['UTILISATEUR']);
+         */return true;
     }
 
     /* public function initialiserSessionUtilisateur(string $email): void
@@ -512,7 +517,7 @@ class UtilisateurRepository
         return $stmt->fetchAll();
     }
 
-    
+
     /**
      *  * Summary of getUtilisateurBy_X
      * @param string $type = [
@@ -532,7 +537,7 @@ class UtilisateurRepository
      * $users = $repo->getUtilisateurBy_X('email', 'john', 10, 20);
      * => 10 utilisateurs dont l'email contient 'john', à partir du 21e résultat
      */
-    public function getUtilisateurBy_X(string $type, string $value, int $limit = 20, int $offset = 0): array
+    public function getUtilisateursBy_X(string $type, string $value, int $limit = 20, int $offset = 0): array
     {
         // Liste blanche des colonnes autorisées
         $colonnesAutorisees = ['id_utilisateur', 'nom', 'prenom', 'email', 'login', 'role', 'is_active', 'telephone'];
@@ -560,6 +565,38 @@ class UtilisateurRepository
             ':value' => $value,
             ':limit' => $limit,
             ':offset' => $offset
+        ]);
+        /* prepare($sql);
+    $stmt->bindValue(':value', $value, \PDO::PARAM_STR);
+    $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);
+    $stmt->execute(); */
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    public function getUtilisateurBy_X(string $type, string $value): array
+    {
+        // Liste blanche des colonnes autorisées
+        $colonnesAutorisees = ['id_utilisateur', 'nom', 'prenom', 'email', 'login', 'role', 'is_active', 'telephone'];
+
+        if (!in_array($type, $colonnesAutorisees, true)) {
+            throw new TypeUserException("Colonne invalide : $type");
+        }
+
+        // Colonnes autorisées pour une recherche partielle
+        $colonnesAvecLike = ['nom', 'prenom', 'email'];
+
+        // Construction dynamique de la requête
+        if (in_array($type, $colonnesAvecLike, true)) {
+            $sql = "SELECT * FROM utilisateur WHERE $type LIKE :value";
+            $value = '%' . $value . '%';
+        } else {
+            $sql = "SELECT * FROM utilisateur WHERE $type = :value";
+        }
+
+        // Préparation et exécution
+        $stmt = $this->database->executeSqlPrepareStatement($sql, [
+            ':value' => $value
         ]);
         /* prepare($sql);
     $stmt->bindValue(':value', $value, \PDO::PARAM_STR);

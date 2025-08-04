@@ -13,15 +13,17 @@ use App\Core\Exceptions\UtilisateurException;
 Autoloader::register();
 echo '<pre>';
 $_sessionManager = SessionManager::getInstance();
-$_sessionManager->getSession()->destroy();
-$_sessionManager->regeneratedSessionUtilisateur();
+//$_sessionManager->getSession()->start();
+//$_sessionManager->getSession()->destroy();
+//$_sessionManager->regenerateSession();
 echo '</pre>';
-$_session = $_sessionManager->getSession();
-$_utilisateur = $_session->get('utilisateur');
+//$_session = $_sessionManager->getSession();
+//$_utilisateur = $_session->get('utilisateur');
     
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         //echo 'je suis la';
+        //session_start();
         $utilisateurRepository = new UtilisateurRepository();
         //echo 'je suis la';
         $resultBool = $utilisateurRepository->signUp($_POST);
@@ -30,11 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         var_dump($resultBool); */
         //echo 'signup';
         //$utilisateurs = $utilisateurRepository->getUtilisateurs();
-        $_session = $_sessionManager->getSession();
+        /* $_session = $_sessionManager->getSession();
         $_utilisateur = $_session->get('utilisateur');
-        echo 'user in connexion 35';
+         *//* echo 'session connexion';
+        var_dump($_SESSION);
+         *//* echo 'user in connexion 35';
         var_dump($_utilisateur);
-        //(new Utils())->redirect('/app/vues/client/menu.php');
+         */
+        (new Utils())->redirect('/app/vues/client/menu.php');
     } catch (UtilisateurException $exception) {
         $exception->getTrace();
     }

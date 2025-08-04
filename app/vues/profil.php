@@ -13,36 +13,24 @@ use App\Lib\Utils;
 
     $title = "Tasty Food - PROFIL UTILISATEUR";
     $utilisateurRepository = new UtilisateurRepository();
-
-    $_sessionManager = SessionManager::getInstance();
-    $_utilisateur = $_sessionManager->getSession()->get('utilisateur');
-    //var_dump($_sessionManager);
-    echo 'div';
-    var_dump($_utilisateur);
-    ob_start();
-?>
-<div class="min-h-screen flex flex-col items-center justify-center max-w-screen-sm">
-    <h1 class="text-center text-xl font-bold text-gray-800">Profil Utilisateur</h1>
-
     
-    <br>
+    $_utilisateur = ($utilisateurRepository->getUtilisateurBy_X('id_utilisateur', $_SESSION['ID']))[0];
+    
+?>
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
     <div class="bg-white shadow-md rounded-lg p-8 w-full max-w-md text-center">
         <!-- Image de profil -->
         <div class="flex justify-center mb-4">
-           <img class="w-24 h-24 rounded-full object-cover border-4 border-indigo-500" src="<?= Constante::base_url() . Constante::base_url_img_profil().'/default_profile_photo.jpg' ?>" alt="Avatar">
+            <img class="w-24 h-24 rounded-full object-cover border-4 border-indigo-500" src="<?= Constante::base_url() . Constante::base_url_img_profil().'/default_profile_photo.jpg' ?>" alt="Avatar">
         </div>
-
         <!-- Nom -->
-        <h2 class="text-2xl font-bold text-gray-800 mb-1"><?= $_utilisateur['nom'] ?></h2>
-
+        <h2 class="text-2xl font-bold text-gray-800 mb-1">Nom : <?= htmlspecialchars($_utilisateur['nom']) ?></h2>
         <!-- Email -->
-        <p class="text-gray-500 mb-4"><?= $_utilisateur['email'];?></p>
-
+        <p class="text-gray-500 mb-4">Email : <?= htmlspecialchars($_utilisateur['email']);?></p>
         <!-- Rôle -->
         <span class="inline-block px-3 py-1 text-sm bg-indigo-100 text-indigo-700 rounded-full mb-6">
-            <?= $_utilisateur['role'];?>
+            Role : <?= htmlspecialchars($_utilisateur['role']);?>
         </span>
-
         <!-- Bouton modifier -->
         <div>
             <a href="modifier-profil.php" class="inline-block bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700 transition">
