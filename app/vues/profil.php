@@ -17,15 +17,8 @@ use App\Lib\Utils;
     $_sessionManager = SessionManager::getInstance();
     $_utilisateur = $_sessionManager->getSession()->get('utilisateur');
     //var_dump($_sessionManager);
-    //var_dump($_utilisateur);
-
-    //$utilisateur = $utilisateurRepository->
-    global $_session;
-    /* if(!$_session->has('utilisateur')) :
-/*         (new Utils())->redirect(__DIR__ .'/../../erreur403.php');
- *    endif;
-    if($_session->has('utilisateur')) :
-         */
+    echo 'div';
+    var_dump($_utilisateur);
     ob_start();
 ?>
 <div class="min-h-screen flex flex-col items-center justify-center max-w-screen-sm">
@@ -36,7 +29,7 @@ use App\Lib\Utils;
     <div class="bg-white shadow-md rounded-lg p-8 w-full max-w-md text-center">
         <!-- Image de profil -->
         <div class="flex justify-center mb-4">
-            <img class="w-24 h-24 rounded-full object-cover border-4 border-indigo-500" src="<?= Constante::base_url_img_profil().'default_profile_photo.jpg' /* . $_session->get('utilisateur')['img_profil'] */?>" alt="Avatar">
+           <img class="w-24 h-24 rounded-full object-cover border-4 border-indigo-500" src="<?= Constante::base_url() . Constante::base_url_img_profil().'/default_profile_photo.jpg' ?>" alt="Avatar">
         </div>
 
         <!-- Nom -->

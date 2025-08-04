@@ -28,7 +28,8 @@ if (session_status() === PHP_SESSION_NONE) {
  */
 class SecureSession
 {
-    private String $role;
+    //private String $role;
+    private static ?SecureSession $instance = null;
 
     //Durée d'inactivité maximale avant expiration (expiration)
     private int $timeOutLastActivity = 0;
@@ -59,20 +60,19 @@ class SecureSession
 
     private array $session;
 
-    public function __construct(
-        int $positionsInRole = 3,
+    private function __construct(
         int $timeOutLastActivity = self::TIMEOUT_LAST_ACTIVITY_NUMBER_OF_MINUTES,
         int $timeOutCreated = self::TIMEOUT_CREATED_NUMBER_OF_MINUTES
     ) {
 
-        $this->role = Role::getRoleByIndex($positionsInRole) ?? 'visiteur';
+        //$this->role = Role::getRoleByIndex($positionsInRole) ?? 'visiteur';
 
         //convertit les minutes en secondes
         $this->timeOutLastActivity = $timeOutLastActivity * self::MINUTES;
         $this->timeOutCreated = $timeOutCreated * self::MINUTES;
 
         //Démarre une session sécurisée avec des options strictes
-        if (session_status() === PHP_SESSION_NONE) {
+        /* if (session_status() === PHP_SESSION_NONE) {
             session_start([
                 // Empêche l'accès au cookie de session via JavaScript (protège contre les attaques XSS)
                 'cookie_httponly' => true,
@@ -83,11 +83,19 @@ class SecureSession
                 // Envoie le cookie de session uniquement via HTTPS si le site est en HTTPS (protège contre l'interception du cookie)
                 'cookie_secure' => isset($_SERVER['HTTPS']),
             ]);
-        }
+        } */
+        $this->connectSession();
         $this->handleSessionSecurity();
     }
 
-    public function connectSession()
+    public static function getInstance() : SecureSession {
+        if(self::$instance === null){
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    private function connectSession()
     {
         //Démarre une session sécurisée avec des options strictes
         if (session_status() === PHP_SESSION_NONE) {
@@ -131,14 +139,11 @@ class SecureSession
             exit;
         } */
         //$_SESSION['LOGIN'] = "";
-        self::role($this->role);
+        //self::role($this->role);
     }
 
     public function role($role)
     {
-        /* set('utilisateur', [
-            'id'         => $utilisateur['id_utilisateur']
-         */ //echo $role;
         switch ($role) {
             case 'client':
                 $this->set('utilisateur', ['role' => $role]);
@@ -153,7 +158,7 @@ class SecureSession
                 $this->set('utilisateur', ['role' => $role]);
                 break;
             default:
-                $this->set('ROLE', 'visiteur');
+                $this->set('utilisateur', ['role' => 'visiteur']);
                 break;
         }
     }
@@ -197,19 +202,24 @@ class SecureSession
     // Détruit complètement la session
     public function destroy(): void
     {
-        $_SESSION = [];
-        /**
-         * Supprime toutes les variables enregistrées dans $_SESSION
-         * Mais ne détruit pas encore le fichier de session.
-         */
-        session_unset();
-        /**
-         * Détruit la session en cours côté serveur (le fichier de session est supprimé).
-         * Le navigateur gardera encore le cookie PHPSESSID, 
-         * mais il ne correspondra à aucune session active, 
-         * donc l'utilisateur est considéré comme déconnecté.
-         */
-        session_destroy();
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            //$_SESSION = [];
+            /**
+             * Supprime toutes les variables enregistrées dans $_SESSION
+             * Mais ne détruit pas encore le fichier de session.
+             */
+            session_unset();
+            /**
+             * Détruit la session en cours côté serveur (le fichier de session est supprimé).
+             * Le navigateur gardera encore le cookie PHPSESSID, 
+             * mais il ne correspondra à aucune session active, 
+             * donc l'utilisateur est considéré comme déconnecté.
+             */
+            session_destroy();
+        }
+        else {
+
+        }
     }
 
 
@@ -217,7 +227,7 @@ class SecureSession
      * This function show a message of confirmation or error.
      * It can disappear in 5 secondes if it is a flash message that has an id #flash-message
      */
-    public static function getMessage($message)
+    public static function showMessage($message)
     {
         if ($message) {
             $isError = str_contains(strtolower($message), 'échec') || str_contains(strtolower($message), 'erreur');

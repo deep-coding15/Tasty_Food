@@ -1,13 +1,18 @@
 <?php
 //les namespaces n'ont pas leurs places dans les fichiers frontaux
+
+require_once __DIR__ . '/../app/Core/Autoloader.php';
+use App\Core\Autoloader;
+
+Autoloader::register();
 use App\Config\SessionManager;
 $_sessionManager = SessionManager::getInstance();
 
-use App\Core\Autoloader;
 
 use App\Config;
 use App\Controleurs\Client\CarteControleur;
 use App\Controleurs\Client\PanierControleur;
+use App\Controleurs\Client\ProfilControleur;
 
 $page = $_GET['page'] ?? 'carte';
 $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING) ?? 'carte';
@@ -22,6 +27,9 @@ $routes = [
     'panier' => [
         PanierControleur::class, 'afficherPanier'
     ],
+    'profil' => [ 
+        ProfilControleur::class, 'afficherProfil'
+    ]
 ];
 
 /**

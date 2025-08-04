@@ -26,7 +26,7 @@ $_sessionManager = $_instance->getSession();
   ?>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="<?= Constante::base_public() . '/assets/css/output.css' ?>">
+  <link rel="stylesheet" href="<?= Constante::base_url() . Constante::base_public() . '/style.css' ?>">
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 
   <title>
@@ -49,7 +49,8 @@ $_sessionManager = $_instance->getSession();
         <a href="<?= Constante::base_url_vues_client() ?>/livraison.php" class="text-gray-600 hover:text-blue-600 flex-1">Livraison</a>
         <a href="<?= Constante::base_url_vues_client() ?>/a_propos.php" class="text-gray-600 hover:text-blue-600 flex-1">A propos</a>
         <a href="<?= Constante::base_url_vues_client() ?>/contact.php" class="text-gray-600 hover:text-blue-600 flex-1">Contact</a>
-        <a href="<?= Constante::base_url_vues_client() ?>/authentification/connexion.php" class="text-gray-600 hover:text-blue-600 flex-1 border border-black rounded text-green-500" id="connexion">Connexion</a>
+        <a href="<?= Constante::base_url_vues_client() ?>/authentification/connexion.php" class="text-gray-600 hover:text-blue-600 flex-1 
+          border border-black rounded text-green-500" id="connexion">Connexion</a>
         <a href="<?= Constante::base_url_vues() ?>/app/vues/profil.php" class="text-gray-600 hover:text-blue-600 flex-1">Profil</a>
       </nav>
       <!-- bouton hamburger visible sur mobile (petits écrans)-->

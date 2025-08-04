@@ -1,31 +1,58 @@
 <?php
+
+use App\Lib\Utils;
 require_once dirname(__DIR__, 3) . '/Core/Autoloader.php';
 
 use App\Core\Autoloader;
 use App\Modeles\Utilisateurs\UtilisateurRepository;
 use App\Config\Constante;
 use App\Config\ConstanteServer;
+use App\Config\SessionManager;
+use App\Core\Exceptions\UtilisateurException;
 
 Autoloader::register();
+echo '<pre>';
+$_sessionManager = SessionManager::getInstance();
+$_sessionManager->getSession()->destroy();
+$_sessionManager->regeneratedSessionUtilisateur();
+echo '</pre>';
+$_session = $_sessionManager->getSession();
+$_utilisateur = $_session->get('utilisateur');
+    
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
+        //echo 'je suis la';
         $utilisateurRepository = new UtilisateurRepository();
-        $utilisateurRepository->signUp($_POST);
+        //echo 'je suis la';
+        $resultBool = $utilisateurRepository->signUp($_POST);
+        /* echo 'je suis la';
+        echo 'je suis la';
+        var_dump($resultBool); */
         //echo 'signup';
         //$utilisateurs = $utilisateurRepository->getUtilisateurs();
-    } catch (\App\Core\Exceptions\UtilisateurException $exception) {
+        $_session = $_sessionManager->getSession();
+        $_utilisateur = $_session->get('utilisateur');
+        echo 'user in connexion 35';
+        var_dump($_utilisateur);
+        //(new Utils())->redirect('/app/vues/client/menu.php');
+    } catch (UtilisateurException $exception) {
         $exception->getTrace();
     }
+    //echo 'je suis la';
 }
 
 $title = "Tasty Food - CONNEXION";
 ob_start();
 ?>
 <section class="w-4/6 mx-auto signup">
-
+    <?php /* echo 'session Manager : <pre>'; var_dump($_sessionManager); echo '</pre>'; */?>
+    <?php /*  echo 'session : <pre>'; var_dump($_session); echo '</pre>'; */?>
+    <?php /* echo 'utilisateur : <pre>'; var_dump($_utilisateur); echo '</pre>'; */?>
+    
+    
     <div class="flex flex-col items-center justify-center m-12 w-full mb-24">
         <h1 class="text-center text-2xl font-medium text-gray-800 mb-6">SIGN UP</h1>
-        <form action="" method="post"
+        <form action="" method="POST"
             class="bg-gray-300 p-8 rounded-3xl shadow-2xl w-full max-w-md space-y-4 transition duration-500 ease-out hover:scale-105
       flex flex-col justify-center">
 

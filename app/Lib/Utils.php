@@ -21,11 +21,13 @@ class Utils
      * @param string $path chemin de l'adresse a specifiée a partir du projet /tastyfood : /public => /tastyfood/public
      * @param int $status
      * @return never
+     * Souvent quand il y'a l'erreur "ERR_UNSAFE_REDIRECT" c'est parceque le fichier de redirection est un fichier serveur
      */
     public static function redirect(string $path =  '/index.php', int $status = 302): void
     {
+        self::afficherErreurPHP();
         $baseUrl = 'http://localhost/php/tastyfood';
-        $baseUrl = ConstanteServer::base_path();
+        //$baseUrl = ConstanteServer::base_path();
         $pathUrl = rtrim($baseUrl, '/') . $path;
 
         if (!headers_sent()) {

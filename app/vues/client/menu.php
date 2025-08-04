@@ -2,11 +2,16 @@
 namespace App\Vues\Client;
 use App\Modeles\PlatRepository;
 use App\Config\ConstanteServer;
+use App\Config\SessionManager;
+use App\Core\Autoloader;
 
+require_once dirname(__DIR__, 2) . '/Core/Autoloader.php';
+Autoloader::register();
 $title = 'Tasty Food - Accueil'; ?>
 <?php
-require_once __DIR__ . '/../models/plats.php';
-require_once __DIR__ . '/../../config/config.php';
+$SessionManager = SessionManager::getInstance();
+$_utilisateur = $SessionManager->getSession()->get('utilisateur');
+var_dump($_utilisateur);
 $platRepository = new PlatRepository();
 ?>
 

@@ -9,6 +9,10 @@ class ConstanteServer{
     
     private static string $BASE_VUES = '/app/vues/';
 
+    /**
+     * Summary of base_path_public
+     * string c:\\xampp\\htdocs\\php\\tastyfood
+     */ 
     public static function getBasePath(): string{
         if(self::$BASE_PATH === null)
             self::set_base_path();

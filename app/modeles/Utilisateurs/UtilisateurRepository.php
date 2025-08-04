@@ -10,6 +10,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 use App\Config;
+use App\Config\ConstanteServer;
 use App\Core\Database;
 
 class Utilisateur
@@ -21,7 +22,7 @@ class Utilisateur
     private string $login;
     private string $password;
     private bool $is_active;
-    private string $img_profil;
+    private string $img_profil = '/default_profile_photo.jpg';
     private int $telephone;
     private \DateTime $created_at;
     private \DateTime $updated_at;
@@ -36,7 +37,7 @@ class Utilisateur
         $this->login = $login;
         $this->password = $password;
         $this->is_active = $is_active;
-        $this->img_profil = Constante::base_url() . '/data/Profile/Images/' . $img_profil;
+        $this->img_profil = ConstanteServer::base_url_img_profil() . $img_profil;
         //$this->img_profil = $img_profil;
         $this->telephone = $telephone;
         $this->created_at = $created_at;
@@ -142,7 +143,7 @@ class Utilisateur
 use App\Config\SessionManager;
 use App\Core\Exceptions\TypeUserException;
 use App\Lib\Utils;
-
+        
 class UtilisateurRepository
 {
     /**
@@ -151,7 +152,7 @@ class UtilisateurRepository
      */
     private ?Database $database = null;
     private ?SessionManager $sessionManager = null;
-
+    
     public function getDatabase(): Database|null
     {
         return $this->database;
@@ -313,10 +314,8 @@ class UtilisateurRepository
         }
     }
 
-    public function signUp(array $postData)
+    public function signUp(array $postData): bool
     {
-        //echo 'hi';
-        global $_sessionManager;
         //var_dump($_sessionManager);
         if (
             isset($postData["password"]) && trim($postData["password"]) != ""
@@ -326,17 +325,22 @@ class UtilisateurRepository
             $email = trim($postData["email"]);
 
 
-            if (self::validerSignup($email, $password)) {
+            try{
+                $this->validerSignup($email, $password);
                 $message = "Vos informations de connection sont corrects. Votre compte est maintenant actif";
-            } else {
-                $message =  "Vos informations de connection ne sont pas corrects";
             }
+            catch(UtilisateurException $exception){
+                $message = "Erreur : " . $exception->getMessage();
+            }
+
             
             //init session message
             $this->sessionManager->initSessionMessage( $message);
             
-            SecureSession::getMessage($message);            
+            SecureSession::showMessage($message); 
+            return true;           
         }
+        return false;
     }
     
     /* public function redirectByRole(): void
@@ -360,10 +364,15 @@ class UtilisateurRepository
         }
     } */
 
-    function validerSignup($email, $password)
+    function validerSignup(string $email, string $password)
     {
-        global $_sessionManager;
-        $sql = "SELECT role, password, email FROM utilisateur WHERE email = :email";
+        $_sessionManager = SessionManager::getInstance();
+        // Vérifie que les paramètres ne sont pas vides
+        if (empty($email) || empty($password)) {
+            throw new UtilisateurException("Email ou mot de passe manquant.");
+        }
+
+        $sql = "SELECT * FROM utilisateur WHERE email = :email";
 
         $stmt = $this->database->executeSqlPrepareStatement($sql, [
             ":email" => $email
@@ -371,15 +380,23 @@ class UtilisateurRepository
         
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
         
-        if (!$user || !password_verify($password, $user['password'])) {
+        if (!$user) {
+            throw new UtilisateurException("Aucun utilisateur trouvé avec cet email.");
+        }
+
+        if (!password_verify($password, $user['password'])) {
             throw new UtilisateurException('le mot de passe n\'est pas valide');
         }
         
-        //active le compte
-        $sql_verify = "UPDATE utilisateur SET is_active = 1 WHERE email = :email";
-        $this->database->executeSqlPrepareStatement($sql_verify, [
-            ":email" => $user['email']
-        ]);
+        // Active le compte uniquement s’il n'est pas déjà actif
+        if ((int)$user['is_active'] === 0) {
+            $sqlVerify = "UPDATE utilisateur SET is_active = 1 WHERE email = :email";
+            $this->database->executeSqlPrepareStatement($sqlVerify, [":email" => $email]);
+        }
+        echo 'user in valider signup';
+        var_dump($user);
+        $_sessionManager->initSessionUtilisateur($user['role'], $user);
+        
         return true;
     }
 

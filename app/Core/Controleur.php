@@ -1,7 +1,11 @@
 <?php
+
 namespace App\Core;
+
 use App\Core\Autoloader;
 use App\Config\Constante;
+use App\Config\ConstanteServer;
+
 class Controleur
 {
     /**
@@ -13,8 +17,10 @@ class Controleur
     protected function rendreVue(string $cheminVue, array $donnees = [])
     {
         extract($donnees); // transforme ['plats' => ...] en $plats
-        require_once Constante::base_url_vues()
-        __DIR__ . '/../vues/' . $cheminVue . '.php';
+        require_once  ConstanteServer::base_url_vues_client() . $cheminVue . '.php';
+        
+        $layout_path = ConstanteServer::base_public() . '/layout.php';
+        require_once $layout_path;
     }
 
     /**

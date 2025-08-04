@@ -1,9 +1,13 @@
 <?php
 namespace App\Controleurs\Client;
 
+require_once dirname(__DIR__) . '/../Core/Autoloader.php';
+use App\Core\Autoloader;
+Autoloader::register();
+
+
 use App\Core\Controleur;
 use App\Modeles\PlatRepository;
-
 class CarteControleur extends Controleur
 {
     public function __construct() {
@@ -26,7 +30,7 @@ class CarteControleur extends Controleur
             ? $repo->getPlatsByTypeName($types[$page])
             : $repo->getPlats();
 
-        $this->rendreVue('client/carte', [
+        $this->rendreVue('/carte', [
             'plats' => $plats,
             'page'  => $page
         ]);
