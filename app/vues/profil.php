@@ -14,7 +14,10 @@ use App\Lib\Utils;
     $title = "Tasty Food - PROFIL UTILISATEUR";
     $utilisateurRepository = new UtilisateurRepository();
     
-    $_utilisateur = ($utilisateurRepository->getUtilisateurBy_X('id_utilisateur', $_SESSION['ID']))[0];
+    if(!isset($_SESSION['ID'])){
+        $_SESSION['ID'] = 1;
+    }
+    $_utilisateur = ($utilisateurRepository->getUtilisateurBy_X('id_utilisateur', $_SESSION['ID']) )[0];
     
 ?>
 <div class="min-h-screen flex items-center justify-center bg-gray-100">

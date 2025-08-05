@@ -255,11 +255,11 @@ $_session->remove('MESSAGE'); //on l'affiche une seule fois
     <?php $id_cible = isset($_GET['id']) ? $_GET['id'] : null; ?>
     <?php if ($id_cible) : ?>
         <section id="detail" class="flex flex-col items-center justify-center mb-24">
-            <div id="plat" class="bg-gray-300 rounded-3xl p-8 shadow-2xl w-fit mb-24 max-w-md space-y-6 flex-grow flex flex-col items-center justify-center-safe
+            <div id="plat" class="bg-gray-300 rounded-3xl p-8 shadow-2xl w-[400px] mb-24 max-w-xl space-y-6 flex-grow flex flex-col items-center justify-center-safe
             hidden opacity-0 translate-y-2 transition duration-500 hover:scale-105 ease-out">
                 <?php $plat = $platRepository->getPlat((int) $id_cible); ?>
                 <h2 class="text-center text-xl font-bold text-gray-800"><?= $plat->getNomPlat() ?></h2>
-                <img src="<?= $plat->getImgPlat() ?>" alt="" class="w-full h-96 object-cover mx-auto  rounded-t-2xl">
+                <img src="<?= $plat->getImgPlat() ?>" alt="" class="w-full h-48 object-cover mx-auto  rounded-t-2xl">
                 <p><?= $plat->getPrixPlat(); ?> DH</p>
                 <p><?= $plat->getDescription() ?></p>
                 <a href="<?= Constante::base_url_vues_admin() . '/plats/modifier_plat.php' ?>?id=<?= $plat->getIdPlat() ?>" class="bg-blue-600 text-white font-medium py-2 px-4 rounded

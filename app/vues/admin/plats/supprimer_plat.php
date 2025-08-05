@@ -25,7 +25,7 @@ $title = "Modifiez une recette !";
         } else {
             $session->set('MESSAGE', "Echec de la suppression du plat.");
         } */
-        (new Utils())->redirect(Constante::base_url() . "/app/vues/admin/plats/liste.php", 301);
+        (new Utils())->redirect(Constante::getBaseVues() . Constante::getVuesAdmin()  . "/plats/liste.php", 301);
 
     } ?>
     <?php ob_start(); ?>

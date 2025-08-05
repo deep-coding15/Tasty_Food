@@ -58,4 +58,3 @@ if (array_key_exists($page, $routes)) {
     http_response_code(404);
     echo 'Page client inconnue';
 }
-

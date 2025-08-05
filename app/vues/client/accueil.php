@@ -92,7 +92,7 @@ $page = $_GET['page'] ?? 'default'; // valeur par défaut
             Des plats faits maison, avec amour, livrés chez vous.
         </h2>
 
-        <div>
+        <div class="carts grid grid-cols-3 gap-12">
             <?php
             switch ($page) {
                 case 'accompagnement':

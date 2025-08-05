@@ -1,21 +1,27 @@
 <?php
+
 namespace App\Vues\Client;
-use App\Modeles\PlatRepository;
+
+use App\Config\Constante;
 use App\Config\ConstanteServer;
-use App\Config\SessionManager;
-use App\Core\Autoloader;
-session_start();
-require_once dirname(__DIR__, 2) . '/Core/Autoloader.php';
-Autoloader::register();
-$title = 'Tasty Food - Accueil'; ?>
-<?php
-//var_dump($_SESSION);
-/* $SessionManager = SessionManager::getInstance();
-$_utilisateur = $SessionManager->getSession()->get('utilisateur');
-var_dump($_utilisateur);
- */
+
+require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
+
+/* use App\Core\Autoloader;
+
+require_once __DIR__ . '/../../Core/Autoloader.php';
+Autoloader::register(); */
+
+use App\Modeles\PlatRepository;
+
 $platRepository = new PlatRepository();
-?>
+//require_once __DIR__ ."/../connexion/Session.php";
+$title = 'Tasty Food - Accueil'; ?>
+<!-- 
+require_once __DIR__ . '/../models/plats.php';
+require_once __DIR__ . '/../../config/config.php';
+$platRepository = new PlatRepository();
+?> -->
 
 <?php ob_start(); ?>
 
@@ -73,7 +79,7 @@ $pages = [
             ?>
         </ul>
     </nav>
-    <div class="w-7/9 h-px bg-blue-600"></div>
+    <div class="w-8/9 h-[2px] bg-blue-600 rounded-2xl"></div>
 </section>
 
 <?php
@@ -105,26 +111,32 @@ $page = $_GET['page'] ?? 'default'; // valeur par défaut
                     $plats = $platRepository->getPlatsByTypeName('Boissons');
                     break;
                 case 'default':
+                    $plats = $platRepository->getPlats();
+                    break;
                 default:
                     $plats = $platRepository->getPlats();
                     break;
             }
+            //var_dump($plats);
             //$plats = $platRepository->getPlats();
-            foreach ($plats as $plat):
-                ?>
-                <div
-                    class="max-w-sm max-h-full pb-8 bg-white rounded-2xl shadow-lg transition hover:scale-105 hover:shadow-xl duration-300">
-                    <img src="<?php echo $plat->getImgPlat() ?>" alt="<?= 'image du plat' . $plat->getNomPlat(); ?>"
+            ?>
+        </div>
+
+        <div id="carts" class="carts grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <?php foreach ($plats as $plat): ?>
+                <div class="max-w-sm max-h-full pb-2 bg-white rounded-2xl shadow-lg hover:scale-105 transition max-w-screen-sm mx-auto">
+                    <img src="<?= htmlspecialchars($plat->getImgPlat()) ?>"
+                        alt="<?= 'image du plat ' . htmlspecialchars($plat->getNomPlat()) ?>"
                         class="w-full h-48 object-cover rounded-t-2xl">
                     <div class="p-6 space-y-4 min-h-fit">
-                        <p class="text-xl font-bold text-gray-800"><?= $plat->getNomPlat() ?></p>
-                        <p><?= $plat->getPrixPlat() ?> DH</p>
-                        <!-- J'ai envie d'utiliser un display:hidden et avec un toggle le rendre visible -->
-                        <div class="flex items-center justify-between h-full">
-                            <span class="text-lg font-semibold text-green-600 md:flex-1"><?= $plat->getPrixPlat() ?>
-                                DH</span>
-                            <a href="?page=<?= $page ?>&id=<?= $plat->getIdPlat() ?>#plat"
-                                class="bg-blue-600 text-white text-sm font-medium md:flex-1 px-4 py-2 rounded-lg transition hover:bg-blue-700 hover:scale-105">
+                        <p class="text-xl font-bold text-gray-800"><?= htmlspecialchars($plat->getNomPlat()) ?></p>
+
+                        <div class="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0">
+                            <span class="text-lg font-semibold text-green-600 px-4 py-2">
+                                <?= number_format($plat->getPrixPlat(), 2) ?> DH
+                            </span>
+                            <a href="?page=<?= urlencode($page) ?>&id=<?= $plat->getIdPlat() ?>#plat"
+                                class="bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition hover:bg-blue-700">
                                 See profile
                             </a>
                         </div>
@@ -134,45 +146,52 @@ $page = $_GET['page'] ?? 'default'; // valeur par défaut
         </div>
 
 
+
     </section>
 
 
     <?php
     $id_cible = isset($_GET['id']) ? $_GET['id'] : null;
     if ($id_cible):
-        ?>
+    ?>
+
         <section class="flex flex-col items-center justify-center mt-4 mb-24">
-            <div id="plat" class="bg-gray-300 p-8 rounded-3xl shadow-2xl w-fit max-w-md space-y-6 flex-grow flex flex-col items-center justify-center-safe
-                    hidden opacity-0 translate-y-2 transition duration-500 hover:scale-105 ease-out">
+            <div id="plat" class="bg-gray-300 p-2 rounded-3xl shadow-2xl w-fit max-w-md space-y-6 flex-grow flex flex-col items-center justify-center-safe
+        hidden opacity-0 translate-y-2 transition duration-500 hover:scale-105 ease-out">
+
                 <?php $plat = $platRepository->getPlat((int) $id_cible); ?>
-                <h2 class="text-center text-xl font-bold text-gray-800"><?= $plat->getNomPlat() ?></h2>
-                <img src="<?= $plat->getImgPlat() ?>" alt="" class="w-full h-96 object-cover mx-auto  rounded-t-2xl">
-                <p><?= $plat->getPrixPlat(); ?> DH</p>
-                <p><?= $plat->getDescription() ?></p>
+
+                <h2 class="text-center text-xl font-bold text-gray-800">
+                    <?= $plat->getNomPlat() ?>
+                </h2>
+
+                <img src="<?= $plat->getImgPlat() ?>" alt="<?= $plat->getNomPlat() ?>"
+                    class="w-full max-w-[250px] max-h-[200px] object-cover mx-auto rounded-2xl shadow-md">
+
+                <p class="text-lg font-semibold"><?= $plat->getPrixPlat(); ?> DH</p>
+                <p class="text-sm text-gray-700"><?= $plat->getDescription() ?></p>
+
                 <a href="#passez-commande" class="bg-blue-600 text-white font-medium py-2 px-4 rounded
-                    transition hover:duration-700 hover:ease-in-out
-                    hover:bg-blue-700 hover:scale-125 
-                    hover:opacity-90 block justify-center"
-                >
-                        Ajouter au Panier
+            transition hover:duration-700 hover:ease-in-out
+            hover:bg-blue-700 hover:scale-125 
+            hover:opacity-90 block text-center">
+                    Ajouter au Panier
                 </a>
             </div>
         </section>
+
     <?php endif; ?>
-    </div>
-
-
-
-
+</div>
 
 
 <?php if ($id_cible > 0): ?>
     <script>
         const id = <?= (int) ($id_cible) ?>;
         const show_plat = document.getElementById("plat");
+        const carts = document.getElementById("carts");
         if (show_plat) {
             show_plat.classList.remove("hidden");
-
+            carts.classList.remove()
             // Pour déclencher l'animation après l'affichage
             setTimeout(() => {
                 show_plat.classList.remove("opacity-0", "translate-y-2");
@@ -183,6 +202,7 @@ $page = $_GET['page'] ?? 'default'; // valeur par défaut
 
 
 <?php $content = ob_get_clean(); ?>
+
 <?php  
 $layout_path = ConstanteServer::base_public() . '/layout.php';
 require_once $layout_path;

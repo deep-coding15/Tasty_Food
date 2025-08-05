@@ -29,7 +29,7 @@ class Constante extends SuperConstante{
      * @return string /php/tastyfood/app/vues/admin
      */
     public static function base_url_vues_admin(): string{
-        return  SuperConstante::getBaseApp() . SuperConstante::getVuesAdmin();
+        return   SuperConstante::getBaseApp() .  SuperConstante::getBaseVues() . SuperConstante::getVuesAdmin();
     }
 
     /**

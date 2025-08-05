@@ -7,8 +7,8 @@
 
     use App\Modeles\PlatRepository;
     use App\Config\Constante;
-use App\Config\ConstanteServer;
-use App\Lib\Utils;
+  use App\Config\ConstanteServer;
+  use App\Lib\Utils;
     
 
     $title = "Ajout d'une recette !"; ?>
@@ -28,7 +28,7 @@ use App\Lib\Utils;
       $session->set('MESSAGE', "Echec de l'ajout du plat.");
     } */
 
-    (new Utils())->redirect(Constante::base_url_vues_admin() . "/plats/liste.php", 301);
+    (new Utils())->redirect(Constante::getBaseVues() . Constante::getVuesAdmin() . "/plats/liste.php", 301);
 
     //echo "<script>console.log(" . json_encode($result) . ");</script>";
   }

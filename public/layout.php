@@ -42,8 +42,9 @@ $_sessionManager = $_instance->getSession();
  -->
     <!-- max-w-7xl -->
     <div class="mx-auto px-4 py-4 flex items-center justify-between">
-      <nav class="space-x-6 hidden md:flex">
+      <nav class="space-x-6 hidden md:flex w-full">
         <a href="<?= Constante::base_url_vues_client() ?>/accueil.php" class="text-gray-600 hover:text-blue-600 flex-1">Accueil</a>
+        <a href="<?= Constante::base_url_vues_client() ?>/plats.php" class="text-gray-600 hover:text-blue-600 flex-1">Plats</a>  
         <a href="<?= Constante::base_url_vues_client() ?>/menu.php" class="text-gray-600 hover:text-blue-600 flex-1">Menu</a>
         <a href="<?= Constante::base_url_vues_client() ?>/reservation.php" class="text-gray-600 hover:text-blue-600 flex-1">Reservation</a>
         <a href="<?= Constante::base_url_vues_client() ?>/livraison.php" class="text-gray-600 hover:text-blue-600 flex-1">Livraison</a>
