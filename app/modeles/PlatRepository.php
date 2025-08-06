@@ -166,7 +166,8 @@ class Plat
             "Image: {$this->img_plat}\n" .
             "Created at: {$this->created_at->format('Y-m-d H:i:s')} \n" .
             "Updated at: {$this->updated_at->format('Y-m-d H:i:s')} \n" .
-            "Deleted at: {$this->deleted_at->format('Y-m-d H:i:s')} \n";
+            "Deleted at: {$this->deleted_at->format('Y-m-d H:i:s')} \n"
+        ;
     }
 }
 
@@ -228,6 +229,7 @@ class PlatRepository
             //$this->pdo = self::$sharedDatabase->getConnection();
         }
         //$this->session = $_session;
+        $this->setImagesByAPI();
         $this->database = Database::getInstance();
     }
 

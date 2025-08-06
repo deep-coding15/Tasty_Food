@@ -14,6 +14,11 @@ class SuperConstante
     protected static string $BASE_VUES = '/app/vues';
     protected static string $BASE_APP_CORE = '/app/Core';
 
+    public const DB_HOST = 'localhost';
+    public const DB_NAME = 'restaurant_tasty_food';
+    public const DB_USER = 'root';
+    public const DB_PASSWORD = '';
+
     /**
      * Summary of getBaseUrl
      * @return string '/php/tastyfood

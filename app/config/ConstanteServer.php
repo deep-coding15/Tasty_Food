@@ -5,6 +5,7 @@ class ConstanteServer{
     private static string $VUES_ADMIN = "/admin";
     private static string $VUES_CLIENT = "/client";
     private static string $BASE_IMG_PROFIL = '/app/data/Profile/Images';
+    private static string $BASE_DATA = '/app/data';
     private static string $BASE_PUBLIC = '/public';
     
     private static string $BASE_VUES = '/app/vues/';
@@ -42,6 +43,9 @@ class ConstanteServer{
         return self::getBasePath() . SuperConstante::getBasePublic();
     }
 
+    public static function base_data()  : string{
+        return self::$BASE_DATA;
+    }
     /**
      * Summary of base_url_vues_admin
      * @return string /php/tastyfood/app/vues/admin
@@ -84,5 +88,8 @@ class ConstanteServer{
 
     public static function base_path_app_core(){
         return self::getBasePath() . SuperConstante::getBaseAppCore();
+    }
+    public static function base_path_app_data(){
+        return self::getBasePath() . self::base_data();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Vues\Client;
 
 use App\Config\Constante;
 use App\Config\ConstanteServer;
+use InvalidArgumentException;
 
 require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
@@ -179,7 +180,9 @@ $page = $_GET['page'] ?? 'default'; // valeur par défaut
                 </a>
             </div>
         </section>
-
+        <?/*  else : 
+        throw new InvalidArgumentException("un id ne peux pas être null");
+     */?>
     <?php endif; ?>
 </div>
 
